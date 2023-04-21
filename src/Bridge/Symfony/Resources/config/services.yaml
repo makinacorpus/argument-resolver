@@ -1,0 +1,19 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        public: false
+
+    MakinaCorpus\ArgumentResolver\Metadata\ReflectionCallableMetadataFactory: ~
+
+    MakinaCorpus\ArgumentResolver\Metadata\CallableMetadataFactory:
+        alias: MakinaCorpus\ArgumentResolver\Metadata\ReflectionCallableMetadataFactory
+
+    argument_resolver.default:
+        tags: [{ name: 'argument_resolver', id: 'default'}]
+
+    MakinaCorpus\ArgumentResolver\Resolver\ContextArgumentValueResolver:
+        tags: [{ name: 'argument_resolver.default', priority: 100 }]
+
+    MakinaCorpus\ArgumentResolver\Resolver\DefaultArgumentValueResolver:
+        tags: [{ name: 'argument_resolver.default', priority: -100 }]

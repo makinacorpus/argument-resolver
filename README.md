@@ -111,8 +111,8 @@ to define a new service, such as:
 services:
     # ... your other services
     my_custom_bundle.argument_resolver:
-        tags:
-            - { name: 'argument_resolver', id: 'my_custom_name' }
+        class: MakinaCorpus\ArgumentResolver\DefaultArgumentResolver
+        tags: [{ name: 'argument_resolver', id: 'my_custom_name' }]
 ```
 
 You may also want to provide some additional custom value resolvers:
@@ -126,6 +126,9 @@ services:
 
 Notice that the name after the `.` in the `argument_resolver.my_custom_name`
 string refers to the argument resolver `id` attribute.
+
+In your services, use the `my_custom_bundle.argument_resolver` service for
+injection, since you defined for your own usage.
 
 Some compiler passes will do the hard job of autowiring anything that needs
 to be autowired for you.

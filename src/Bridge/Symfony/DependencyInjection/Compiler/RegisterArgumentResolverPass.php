@@ -35,7 +35,15 @@ final class RegisterArgumentResolverPass implements CompilerPassInterface
             $map = [];
         }
 
-        $map[$resolverId][$serviceId] = $methods;
+        if (!isset($map[$resolverId][$serviceId])) {
+            $map[$resolverId][$serviceId] = [];
+        }
+        // Gracefully merge methods.
+        if ($methods) {
+            foreach ($methods as $method) {
+                $map[$resolverId][$serviceId][$method] = $method;
+            }
+        }
 
         $container->setParameter('argument_resolver.service_map', $map);
     }

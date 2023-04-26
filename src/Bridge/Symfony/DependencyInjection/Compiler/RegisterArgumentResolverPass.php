@@ -23,14 +23,14 @@ final class RegisterArgumentResolverPass implements CompilerPassInterface
 
     public static function resolverServiceId(string $id): string
     {
-        return 'argument_resolver.' . $id;
+        return 'custom.argument_resolver.' . $id;
     }
 
     public static function registerServiceMethods(ContainerBuilder $container, string $resolverId, string $serviceId, ?array $methods = null): void
     {
         // This populates incrementally some container parameter.
-        if ($container->hasParameter('argument_resolver.service_map')) {
-            $map = $container->getParameter('argument_resolver.service_map');
+        if ($container->hasParameter('custom.argument_resolver.service_map')) {
+            $map = $container->getParameter('custom.argument_resolver.service_map');
         } else {
             $map = [];
         }
@@ -45,7 +45,7 @@ final class RegisterArgumentResolverPass implements CompilerPassInterface
             }
         }
 
-        $container->setParameter('argument_resolver.service_map', $map);
+        $container->setParameter('custom.argument_resolver.service_map', $map);
     }
 
     private function createServiceLocatorFor(ContainerBuilder $container, string $resolverId, array $services)
@@ -166,16 +166,16 @@ final class RegisterArgumentResolverPass implements CompilerPassInterface
      */
     private function createServiceLocators(ContainerBuilder $container)
     {
-        if (!$container->hasParameter('argument_resolver.service_map')) {
+        if (!$container->hasParameter('custom.argument_resolver.service_map')) {
             return;
         }
-        $map = $container->getParameter('argument_resolver.service_map');
+        $map = $container->getParameter('custom.argument_resolver.service_map');
 
         foreach ($map as $resolverId => $services) {
             $this->createServiceLocatorFor($container, $resolverId, $services);
         }
 
-        $container->getParameterBag()->remove('argument_resolver.service_map');
+        $container->getParameterBag()->remove('custom.argument_resolver.service_map');
     }
 
     /**
@@ -185,13 +185,13 @@ final class RegisterArgumentResolverPass implements CompilerPassInterface
     {
         $registered = [];
 
-        foreach ($container->findTaggedServiceIds('argument_resolver') as $serviceId => $attributes) {
+        foreach ($container->findTaggedServiceIds('custom.argument_resolver') as $serviceId => $attributes) {
             $id = $attributes[0]['id'] ?? null;
             if (!$id) {
-                throw new InvalidArgumentException(\sprintf("Service '%s' uses the 'argument_resolver' tag without setting the 'id' attribute.", $serviceId));
+                throw new InvalidArgumentException(\sprintf("Service '%s' uses the 'custom.argument_resolver' tag without setting the 'id' attribute.", $serviceId));
             }
             if (isset($registered[$id])) {
-                throw new InvalidArgumentException(\sprintf("Service '%s' uses the 'argument_resolver' and redefined the '%s' value for the 'id' attribute.", $serviceId, $id));
+                throw new InvalidArgumentException(\sprintf("Service '%s' uses the 'custom.argument_resolver' and redefined the '%s' value for the 'id' attribute.", $serviceId, $id));
             }
 
             $definition = $container->getDefinition($serviceId);
@@ -216,11 +216,11 @@ final class RegisterArgumentResolverPass implements CompilerPassInterface
         // argument resolver via an argument value locator.
         $this->createServiceLocators($container);
 
-        // Add "argument_resolver.ID" tags for all identifiers, to all "default"
+        // Add "custom.argument_resolver.ID" tags for all identifiers, to all "default"
         // identified value resolvers, to propagate them to all definitions.
         // This allow us to preserve the priority.
         foreach (\array_keys($registered) as $id) {
-            foreach ($container->findTaggedServiceIds('argument_resolver.default') as $serviceId => $attributes) {
+            foreach ($container->findTaggedServiceIds('custom.argument_resolver.default') as $serviceId => $attributes) {
                 $definition = $container->getDefinition($serviceId);
                 $resolverTag = self::resolverServiceId($id);
                 if (!$definition->hasTag($resolverTag)) {

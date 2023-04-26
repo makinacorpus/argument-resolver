@@ -18,7 +18,7 @@ from the Symfony component:
  - [x] API basics
  - [x] Retrieve features from `makinacorpus/access-control`
  - [x] Basic Symfony bundle
- - [ ] Service argument value resolver
+ - [x] Service argument value resolver
 
 # Get started
 
@@ -96,9 +96,9 @@ dedicated string identifier, for example:
 
 For plugging in custom value resolver, there is two different tags:
 
- - use the `argument_resolver.default` tag for registering a value resolver
+ - use the `custom.argument_resolver.default` tag for registering a value resolver
    to all argument resolvers,
- - use the `argument_resolver.NAME` tag, where `NAME` is one of the argument
+ - use the `custom.argument_resolver.NAME` tag, where `NAME` is one of the argument
    resolver identifiers for register a given value converter.
 
 ## Define a new argument resolver
@@ -112,7 +112,7 @@ services:
     # ... your other services
     my_custom_bundle.argument_resolver:
         class: MakinaCorpus\ArgumentResolver\DefaultArgumentResolver
-        tags: [{ name: 'argument_resolver', id: 'my_custom_name' }]
+        tags: [{ name: 'custom.argument_resolver', id: 'my_custom_name' }]
 ```
 
 You may also want to provide some additional custom value resolvers:
@@ -121,10 +121,10 @@ You may also want to provide some additional custom value resolvers:
 services:
     # ... your other services
     MyCustomBundle\ArgumentResolver\Resolver\FooValueResolver:
-        tags: ['argument_resolver.my_custom_name']
+        tags: ['custom.argument_resolver.my_custom_name']
 ```
 
-Notice that the name after the `.` in the `argument_resolver.my_custom_name`
+Notice that the name after the last `.` in the `custom.argument_resolver.my_custom_name`
 string refers to the argument resolver `id` attribute.
 
 In your services, use the `my_custom_bundle.argument_resolver` service for

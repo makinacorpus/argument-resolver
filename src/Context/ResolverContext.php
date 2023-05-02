@@ -9,4 +9,6 @@ interface ResolverContext
     public function has(string $name): bool;
 
     public function get(string $name, ?array $allowedTypes = null): mixed;
+
+    public function all(): iterable;
 }

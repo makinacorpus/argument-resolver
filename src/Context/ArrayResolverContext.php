@@ -21,6 +21,9 @@ class ArrayResolverContext implements ResolverContext
         return \array_key_exists($name, $this->data);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function get(string $name, ?array $allowedTypes = null): mixed
     {
         if (!\array_key_exists($name, $this->data)) {
@@ -32,5 +35,13 @@ class ArrayResolverContext implements ResolverContext
             return ValueChoices::wrap($value)->find($allowedTypes);
         }
         return $value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function all(): iterable
+    {
+        return $this->data;
     }
 }

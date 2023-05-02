@@ -27,6 +27,7 @@ final class ServiceArgumentValueResolver implements ArgumentValueResolver
                 return true;
             }
         }
+        return false;
     }
 
     /**

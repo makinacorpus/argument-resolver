@@ -23,7 +23,7 @@ final class ServiceArgumentValueResolver implements ArgumentValueResolver
     public function supports(ArgumentMetadata $argument, ResolverContext $context): bool
     {
         foreach ($argument->getTypes() as $type) {
-            if (\class_exists($type) || \interface_exists($type) && $this->container->has($type)) {
+            if ((\class_exists($type) || \interface_exists($type)) && $this->container->has($type)) {
                 return true;
             }
         }

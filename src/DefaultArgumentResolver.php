@@ -71,7 +71,7 @@ class DefaultArgumentResolver implements ArgumentResolver
 
             $representative = $callback;
             if (\is_array($representative)) {
-                $representative = sprintf('%s::%s()', \get_class($representative[0]), $representative[1]);
+                $representative = sprintf('%s::%s()', (\is_object($representative[0]) ? \get_class($representative[0]) : $representative[0]), $representative[1]);
             } elseif (\is_object($representative)) {
                 $representative = \get_class($representative);
             }
